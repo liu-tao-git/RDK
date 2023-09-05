@@ -163,11 +163,11 @@ void highPriorityPeriodicTask(flexiv::Robot& robot)
             excelData.clear();
 
             excelData.push_back(flexiv::utility::mQuat2mmDeg(robotStates.flangePose));
+            excelData.push_back(robotStates.ftSensorRaw);
             excelData.push_back(flexiv::utility::mQuat2mmDeg(robotStates.tcpPose));
             excelData.push_back(flexiv::utility::ms2mms(robotStates.tcpVel));
-            excelData.push_back(robotStates.ftSensorRaw);
             excelData.push_back(robotStates.extWrenchInTcp);
-            excelData.push_back(robotStates.q);
+            excelData.push_back(flexiv::utility::rad2Deg(robotStates.q));
             excelData.push_back(robotStates.tauExt);
 
             data_vector.push_back(excelData);
@@ -204,31 +204,31 @@ void highPriorityPeriodicTask(flexiv::Robot& robot)
             MyExcelFile << "NodeName"<<",";
             MyExcelFile << "FLA_X"<<","<<"FLA_Y"<<"," << "FLA_Z"<<"," ;
             MyExcelFile << "FLA_Rx"<<","<<"FLA_Ry"<<"," << "FLA_Rz"<<"," ;
+            MyExcelFile << "FtSensor_Fx"<<","<< "FtSensor_Fy"<<","<< "FtSensor_Fz"<<",";
+            MyExcelFile << "FtSensor_Mx"<<","<< "FtSensor_My"<<","<< "FtSensor_Mz"<<",";
             MyExcelFile << "TCP_X"<<","<<"TCP_Y"<<"," << "TCP_Z"<<"," ;
             MyExcelFile << "TCP_Rx"<<","<<"TCP_Ry"<<"," << "TCP_Rz"<<"," ;
             MyExcelFile << "Vel_X"<<","<<"Vel_Y"<<"," << "Vel_Z"<<"," ;
             MyExcelFile << "Vel_Rx"<<","<<"Vel_Ry"<<"," << "Vel_Rz"<<"," ;
-            MyExcelFile << "FtSensor_Fx"<<","<< "FtSensor_Fy"<<","<< "FtSensor_Fz"<<",";
-            MyExcelFile << "FtSensor_Mx"<<","<< "FtSensor_My"<<","<< "FtSensor_Mz"<<",";
-            MyExcelFile << "JtSensor_Fx"<<","<< "JtSensor_Fy"<<","<< "JtSensor_Fz"<<",";
-            MyExcelFile << "JtSensor_Mx"<<","<< "JtSensor_My"<<","<< "JtSensor_Mz"<<",";
+            MyExcelFile << "TCP_Fx"<<","<< "TCP_Fy"<<","<< "TCP_Fz"<<",";
+            MyExcelFile << "TCP_Mx"<<","<< "TCP_My"<<","<< "TCP_Mz"<<",";
             MyExcelFile << "A1_Deg"<<","<< "A2_Deg"<<","<< "A3_Deg"<<","<< "A4_Deg"<<","<< "A5_Deg"<<","<< "A6_Deg"<<","<< "A7_Deg"<<",";
-            MyExcelFile << "A1_Nm"<<","<< "A2_Nm"<<","<< "A3_Nm"<<","<< "A4_Nm"<<","<< "A5_Nm"<<","<< "A6_Nm"<<","<< "A7_Nm"<<",";
+            MyExcelFile << "A1_Nm"<<","<< "A2_Nm"<<","<< "A3_Nm"<<","<< "A4_Nm"<<","<< "A5_Nm"<<","<< "A6_Nm"<<","<< "A7_Nm";
             MyExcelFile << std::endl; 
 
             // write data
             while (!data_vector.empty()){
                 MyExcelFile << indexx_vector.front()<<",";
                 MyExcelFile << planTimer_vector.front()<<",";
-                MyExcelFile << nodeName_vector.front()<<","; 
+                MyExcelFile << nodeName_vector.front(); 
                 for (auto i = 0; i < 5; i++){
                     for(int j = 0; j<6; j++){
-                        MyExcelFile << data_vector.front()[i][j]<<",";
+                        MyExcelFile <<","<< data_vector.front()[i][j];
                     }
                 }
                 for (auto i = 5; i < 7; i++){
                     for(int j = 0; j<7; j++){
-                        MyExcelFile << data_vector.front()[i][j]<<",";
+                        MyExcelFile <<","<< data_vector.front()[i][j];
                     }
                 }
                 MyExcelFile << std::endl; 
@@ -245,9 +245,9 @@ void highPriorityPeriodicTask(flexiv::Robot& robot)
             // write timer file header
             if (access(tmpFileName.c_str(), F_OK) == -1) {
                 MyExcelFile.open(tmpFileName);
-                MyExcelFile << "Index"<<","<<"Time"<<",";
+                MyExcelFile << "Index"<<","<<"Time";
                 while (!nodeNameHeader_vector.empty()){
-                    MyExcelFile << nodeNameHeader_vector.front()<<",";
+                    MyExcelFile <<","<< nodeNameHeader_vector.front();
                     nodeNameHeader_vector.erase(nodeNameHeader_vector.begin());
                 }
                 MyExcelFile << std::endl;
@@ -266,9 +266,9 @@ void highPriorityPeriodicTask(flexiv::Robot& robot)
 
             // write timer
             MyExcelFile.open(tmpFileName,ios::app);
-            MyExcelFile << timerIndex <<","<< timeExcel_str <<",";
+            MyExcelFile << timerIndex <<","<< timeExcel_str;
             while (!nodeTimer_vector.empty()){
-                    MyExcelFile << nodeTimer_vector.front()<<",";
+                    MyExcelFile <<","<< nodeTimer_vector.front();
                     nodeTimer_vector.erase(nodeTimer_vector.begin());
                 }
             MyExcelFile << std::endl;
